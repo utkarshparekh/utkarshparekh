@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101211">
+  <meta name="description" content="A technical note on explicit AST column-reference bounds checking in NVIDIA cuDF, based on a merged upstream pull request.">
+  <title>cuDF AST column validation — Utkarsh Parekh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#101211;--text:#f2f4ef;--muted:#a2aaa3;--line:#2b302c;--lime:#c4f36b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 'DM Sans',sans-serif}.shell{width:min(800px,calc(100% - 40px));margin:auto}a{color:var(--lime);text-decoration:none}a:hover{text-decoration:underline}.top{border-bottom:1px solid var(--line);padding:17px 0;font:11px 'DM Mono',monospace}.top a{color:var(--text)}main{padding:64px 0 80px}.eyebrow,.label{font:10px 'DM Mono',monospace;color:var(--lime);letter-spacing:.1em;text-transform:uppercase}h1{font:700 clamp(34px,6vw,54px)/1.08 Manrope,sans-serif;letter-spacing:-.06em;margin:15px 0}h2{font:600 21px Manrope,sans-serif;letter-spacing:-.03em;margin:0 0 8px}p{color:#b0b8b0;margin:0 0 12px}.status{display:inline-block;border:1px solid #4d6339;padding:3px 7px;border-radius:3px;color:var(--lime);font:9px 'DM Mono',monospace;margin:4px 0 28px}.summary{font-size:17px;max-width:700px}.case-section{border-top:1px solid var(--line);padding:23px 0}.case-section .label{margin-bottom:8px}.links{display:flex;gap:17px;flex-wrap:wrap;margin-top:22px;font:10px 'DM Mono',monospace}.code{background:#171a18;border:1px solid var(--line);border-radius:4px;padding:14px 16px;color:#cbd2ca;font:12px/1.7 'DM Mono',monospace;overflow:auto}.footer{border-top:1px solid var(--line);padding:18px 0;color:#8f998f;font:10px 'DM Mono',monospace}a:focus-visible{outline:2px solid var(--lime);outline-offset:3px}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header class="top"><div class="shell"><a href="index.html">← UTKARSH PAREKH / WORK</a></div></header>
+  <main class="shell">
+    <div class="eyebrow">Engineering note · NVIDIA cuDF</div>
+    <h1>Explicit bounds checks for AST column references</h1>
+    <span class="status">MERGED · PR #23021</span>
+    <p class="summary">A focused correctness fix: reject an out-of-range AST column index with a clear bounds error before accessing the table column.</p>
+    <section class="case-section"><div class="label">01 / THE PROBLEM</div><h2>Invalid references reached table access</h2><p><code>column_reference::get_data_type()</code> obtained a column type from a table view using the expression's column index. An invalid index did not have an explicit, domain-specific check at that point.</p></section>
+    <section class="case-section"><div class="label">02 / WHY IT MATTERS</div><h2>Fail clearly at the validation boundary</h2><p>Checking the index where it is used makes invalid references fail predictably and gives callers a clear <code>std::out_of_range</code> error, rather than relying on a lower-level vector range-check message.</p></section>
+    <section class="case-section"><div class="label">03 / MY CONTRIBUTION</div><h2>Validate both table-reference paths</h2><p>The merged change adds explicit index validation for the single-table and left/right-table overloads of <code>get_data_type()</code>, and adds a regression test covering an index beyond the available columns.</p></section>
+    <section class="case-section"><div class="label">04 / IMPLEMENTATION</div><h2>Check bounds before reading the column type</h2><p>Both overloads check that the index is non-negative and less than the selected table's column count, then retrieve the type. The test verifies that an out-of-range reference throws <code>std::out_of_range</code>.</p><div class="code" aria-label="Simplified bounds check">CUDF_EXPECTS(index &gt;= 0 &amp;&amp; index &lt; table.num_columns(),<br>             "column index out of range",<br>             std::out_of_range);</div><p>This is a simplified illustration; see the linked source for the exact implementation.</p></section>
+    <section class="case-section"><div class="label">05 / ENGINEERING TRADEOFFS</div><h2>Small check, explicit error contract</h2><p>The change adds validation to the type lookup paths and uses the project's expectation mechanism to report an out-of-range error. The PR adds a focused regression test; no performance claim is made here.</p></section>
+    <section class="case-section"><div class="label">06 / SOURCE</div><h2>Review the merged change</h2><p>The upstream PR was merged on June 29, 2026. Its description, implementation, and test are publicly available in NVIDIA/cuDF.</p><div class="links"><a href="https://github.com/NVIDIA/cudf/pull/23021" target="_blank" rel="noreferrer">UPSTREAM PR #23021 ↗</a><a href="https://github.com/NVIDIA/cudf/blob/main/cpp/src/ast/expressions.cpp" target="_blank" rel="noreferrer">IMPLEMENTATION ↗</a><a href="https://github.com/NVIDIA/cudf/blob/main/cpp/tests/ast/transform_tests.cpp" target="_blank" rel="noreferrer">REGRESSION TEST ↗</a><a href="index.html#open-source">← ALL CONTRIBUTIONS</a></div></section>
+  </main>
+  <footer class="footer"><div class="shell">UTKARSH PAREKH · OPEN-SOURCE ENGINEERING</div></footer>
+</body>
+</html>
