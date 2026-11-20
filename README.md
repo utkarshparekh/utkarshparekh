@@ -11,13 +11,7 @@ I build high-performance software at the intersection of accelerated computing, 
 
 ## 🚀 What I Work On
 
-```text
-GPU & Accelerated Computing  ━━━━━━━━━━━━━━━━━━━━━  1
-Data Systems & Analytics     ━━━━━━━━━━━━━━━━━━━━━  2
-Open Source & Apache         ━━━━━━━━━━━━━━━━━━━━━  3
-AI Agents & Developer Tools  ━━━━━━━━━━━━━━━━━━━━━  4
-```
-
+- **Apache Beam** — Unified programming model for batch and streaming data processing
 - **cuDF / RAPIDS** — GPU-accelerated dataframe and analytics workflows
 - **Apache Spark** — GPU acceleration for large-scale data processing
 - **cuVS** — Vector search and clustering for modern retrieval systems
@@ -30,6 +24,7 @@ AI Agents & Developer Tools  ━━━━━━━━━━━━━━━━━
   <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
   <img alt="C++" src="https://img.shields.io/badge/C++-00599C?style=flat-square&logo=cplusplus&logoColor=white" />
   <img alt="Java" src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white" />
+  <img alt="Apache Beam" src="https://img.shields.io/badge/Apache_Beam-FC6D26?style=flat-square&logo=apachebeam&logoColor=white" />
   <img alt="Apache Spark" src="https://img.shields.io/badge/Apache_Spark-E25A1C?style=flat-square&logo=apachespark&logoColor=white" />
   <img alt="CUDA" src="https://img.shields.io/badge/CUDA-76B900?style=flat-square&logo=nvidia&logoColor=white" />
   <img alt="Docker" src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" />
@@ -40,6 +35,7 @@ AI Agents & Developer Tools  ━━━━━━━━━━━━━━━━━
 
 | Project | What it is | Links |
 |---|---|---|
+| **Apache Beam** | Unified programming model for batch and streaming data processing | [Repository](https://github.com/utkarshparekh/beam) |
 | **cuDF** | GPU-accelerated DataFrame library for data science workflows | [Repository](https://github.com/utkarshparekh/cudf) |
 | **RAPIDS Accelerator for Spark** | GPU acceleration for Apache Spark workloads | [Repository](https://github.com/utkarshparekh/cudf-spark) |
 | **cuVS** | GPU-accelerated vector search and clustering library | [Repository](https://github.com/utkarshparekh/cuvs) |
